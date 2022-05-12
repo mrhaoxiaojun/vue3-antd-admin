@@ -6,6 +6,9 @@ export default {
       closeRight: '关闭右侧',
       closeLeft: '关闭左侧',
       closeOthers: '关闭其它',
+    },
+    head:{
+      systemName:"简版通用前端框架"
     }
   },
   errorPages:{

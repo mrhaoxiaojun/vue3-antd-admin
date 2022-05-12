@@ -99,7 +99,7 @@
 .login-container {
   width: 100%;
   height: 100vh;
-  background: url('/src/assets/login/login_bg.png');
+  background: url('/src/assets/imgs/login/login_bg.png');
   background-size: cover;
   overflow: hidden;
   & .login-container-form {
@@ -109,7 +109,7 @@
     margin-top: calc((100vh - 380px) / 2);
     margin-right: 20px;
     margin-left: 20px;
-    background: url('/src/assets/login/form_bg.png');
+    background: url('/src/assets/imgs/login/form_bg.png');
     background-size: 100% 100%;
     border-radius: 10px;
     box-shadow: 0 2px 8px 0 rgba(7, 17, 27, 0.06);

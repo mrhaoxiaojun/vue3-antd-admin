@@ -2,7 +2,7 @@
   <!-- logo -->
   <div class="menu__logo" v-if="setting.layout==='side'">
     <div class="menu__logo-icon">
-      <img src="@/assets/layout/logo.svg" />
+      <img src="@/assets/imgs/layout/logo.svg" />
     </div>
     <span v-show="!collapsed">{{setting.systemName}}</span>
   </div>

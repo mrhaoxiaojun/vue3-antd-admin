@@ -6,6 +6,9 @@ export default {
       closeRight: 'close right',
       closeLeft: 'close left',
       closeOthers: 'close others',
+    },
+    head:{
+      systemName:"Simple general front-end framewor"
     }
   },
   errorPages:{

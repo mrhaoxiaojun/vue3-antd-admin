@@ -21,9 +21,9 @@
       <!-- logo -->
       <div class="menu__logo" v-if="setting.layout==='head'">
         <div class="menu__logo-icon">
-          <img src="@/assets/layout/logo.png" />
+          <img src="@/assets/imgs/layout/logo.png" />
         </div>
-        <span v-show="!collapsed">{{setting.systemName}}</span>
+         <span v-show="!collapsed">{{ t('layout.head.systemName') || setting.systemName }}</span>
       </div>
       
     </div>
@@ -41,7 +41,7 @@
           <a-avatar>
             <template #icon>
               <img :src="avatar" v-if="avatar.length > 0" />
-              <img src="@/assets/layout/avatar.jpg" v-else />
+              <img src="@/assets/imgs/layout/avatar.jpg" v-else />
             </template>
           </a-avatar>
           <div class="header__avatar-name">{{ name.length > 0 ? name : "admin" }}</div>
@@ -114,6 +114,16 @@ export default defineComponent({
 
     // 切换tab
     const tabClick = (e: number) => {
+      
+      store.commit("menu/setId", e);
+
+    };
+
+    watch(activeKey, () => {
+      
+    // tabClick(activeKey.value);
+      let e = activeKey.value
+
       const routers = store.state.user.routers;
       let menuRouter: RouterTable = [];
       routers.forEach((item: RouterObj) => {
@@ -121,13 +131,17 @@ export default defineComponent({
           menuRouter = item.children || [];
         }
       });
+    
       store.commit("menu/setMenu", menuRouter);
-      store.commit("menu/setId", e);
-      router.push(menuRouter[0]?.path);
-    };
 
-    watch(activeKey, () => {
-      tabClick(activeKey.value);
+      // 在header点击时多做了一次赋值不碍事，非header切换路由时需要此内容
+      store.commit("menu/setId", e);
+      
+      
+      // menuRouter只有动态路由或者static.router.ts，白名单路由等不含，需要判断过滤出去
+      if (menuRouter[0]?.path) {
+        router.push(menuRouter[0]?.path);
+      }
     });
 
     // onBeforeMount(() => {
