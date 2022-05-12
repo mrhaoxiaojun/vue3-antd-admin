@@ -4,27 +4,30 @@
       <a-col :xs="0" :md="0" :sm="12" :lg="14" :xl="16"></a-col>
       <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="6">
         <div class="login-container-form">
-          <div class="login-container-hello">您好!</div><br>
+          <div class="login-container-hello">您好!</div>
+          <br />
           <div class="login-container-title">欢迎来到简版前端通用框架</div>
           <a-form ref="formRef" :model="form" :rules="rules" @keyup.enter="handleSubmit">
             <a-form-item name="username">
               <a-input v-model:value="form.username" autocomplete="off" placeholder="请输入账号">
-                <template v-slot:prefix>
+                <template #prefix>
                   <UserOutlined style="color: rgba(0, 0, 0, 0.25)" />
                 </template>
               </a-input>
             </a-form-item>
             <a-form-item name="password">
-             <a-input-password v-model:value="form.password" autocomplete="off" placeholder="请输入密码">
-                <template v-slot:prefix>
+              <a-input-password
+                v-model:value="form.password"
+                autocomplete="off"
+                placeholder="请输入密码"
+              >
+                <template #prefix>
                   <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
                 </template>
               </a-input-password>
             </a-form-item>
             <a-form-item>
-              <a-button type="primary" @click="handleSubmit()">
-                登录
-              </a-button>
+              <a-button type="primary" @click="handleSubmit()"> 登录 </a-button>
             </a-form-item>
           </a-form>
         </div>
@@ -34,65 +37,67 @@
   </div>
 </template>
 
-<script lang="ts" setup >
-  import { defineComponent, reactive, ref, UnwrapRef } from "vue"
-  import { useStore } from 'vuex' 
-  import { useRouter } from 'vue-router'
-  import { message } from 'ant-design-vue'
-  import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
-  import { LoginFrom } from '@/types/views/login'
+<script lang="ts" setup>
+import { reactive, ref, UnwrapRef } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { message } from 'ant-design-vue';
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
+import { LoginFrom } from '@/types/views/login';
 
-  // 表单数据
-  const form = data_form()
+// 表单数据
+const form = dataForm();
 
-  const rules = reactive({
-    username: [
-      {
-        required: true,
-        message: '请输入账号',
-        trigger: 'change'
-      }
-    ],
-    password: [
-      {
-        required: true,
-        message: '请输入密码',
-        trigger: 'change'
-      }
-    ]
-  })
+const rules = reactive({
+  username: [
+    {
+      required: true,
+      message: '请输入账号',
+      trigger: 'change',
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入密码',
+      trigger: 'change',
+    },
+  ],
+});
 
-  const formRef = ref()
+const formRef = ref();
 
-  const store = useStore()
+const store = useStore();
 
-  const router = useRouter()
+const router = useRouter();
 
-  /**
-   * @desc: 登录提交
-   * @param 无
-   */
-  const handleSubmit = (): void => {
-    formRef.value.validate().then(() => {
-      store.dispatch('user/login', form).then(e => {
-        const route = router.currentRoute.value
-        console.log(route)
-        const url = route.query.redirect || '/'
-        router.push(url as string)
+/**
+ * @desc: 登录提交
+ * @param 无
+ */
+const handleSubmit = (): void => {
+  formRef.value.validate().then(() => {
+    store
+      .dispatch('user/login', form)
+      .then(() => {
+        const route = router.currentRoute.value;
+        console.log(route);
+        const url = route.query.redirect || '/';
+        router.push(url as string);
       })
-      .catch(err => {
-        message.error(err.message || err.data.message)
-      })
-    })
-  }
+      .catch((err) => {
+        message.error(err.message || err.data.message);
+      });
+  });
+};
 
-  function data_form () {
-    const form: UnwrapRef<LoginFrom> = reactive({
-      username: undefined,
-      password: undefined
-    })
-    return form
-  }
+function dataForm() {
+  const form: UnwrapRef<LoginFrom> = reactive({
+    username: undefined,
+    password: undefined,
+  });
+  return form;
+}
 </script>
 
 <style lang="less" scoped>

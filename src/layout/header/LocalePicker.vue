@@ -12,9 +12,9 @@
 import { ref, Ref } from 'vue';
 import { useStore } from 'vuex';
 import { SelectTypes } from 'ant-design-vue/es/select';
-import globalConfig from '@/config/index'
+import globalConfig from '@/config/index';
 import langConfig from '@/locales/config';
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
 interface Value {
   value: string;
@@ -24,25 +24,21 @@ interface Value {
 const { locale } = useI18n();
 const store = useStore();
 
-let { setting } = globalConfig
+const { setting } = globalConfig;
 
-let options:Ref = ref<SelectTypes['options']>(langConfig[setting.lang]);
-let lang:Ref =  ref<Value>(langConfig[setting.lang][0])
+const options: Ref = ref<SelectTypes['options']>(langConfig[setting.lang]);
+const lang: Ref = ref<Value>(langConfig[setting.lang][0]);
 
 const handleChange = (value: Value) => {
-
-  options.value = langConfig[value.value]
-  options.value.forEach((e:any) => {
-    if(e.value === value.value){
-      lang.value = e
+  options.value = langConfig[value.value];
+  options.value.forEach((e: any) => {
+    if (e.value === value.value) {
+      lang.value = e;
     }
-  })
+  });
 
-  localStorage.setItem("lang",value.value)
-  store.commit("com/setLang",value.value)
-  locale.value = value.value
-
+  localStorage.setItem('lang', value.value);
+  store.commit('com/setLang', value.value);
+  locale.value = value.value;
 };
-
 </script>
-

@@ -19,11 +19,13 @@
       <li>国际化引入，及配置</li>
       <li>部分页面setup 上移到script内，精简代码</li>
     </ul>
-    <div class="title" style="color:red">2022年03月15日</div>
+    <div class="title" style="color: red">2022年03月15日</div>
     <ul>
       <li>以下记录为开源作者贡献记录，开源万岁</li>
       <li>开始接手开源通用框架进行改造</li>
-      <li style="color:red">------------------------------------------------------------------------------</li>
+      <li style="color: red">
+        ------------------------------------------------------------------------------
+      </li>
     </ul>
     <div class="title">2021年08月04日</div>
     <ul>
@@ -109,7 +111,9 @@
     </ul>
     <div class="title">2021年09月23日</div>
     <ul>
-      <li>添加(emit)编辑弹框打开事件、编辑提交成功事件、添加数据弹框打开事件、添加数据提交成功事件</li>
+      <li>
+        添加(emit)编辑弹框打开事件、编辑提交成功事件、添加数据弹框打开事件、添加数据提交成功事件
+      </li>
       <li>删除部分无用代码</li>
     </ul>
     <div class="title">2021年09月24日</div>
@@ -147,7 +151,9 @@
     </ul>
     <div class="title">2021年10月19日</div>
     <ul>
-      <li>解决头像上传、文件上传规则验证问题，原因：a-upload组件上传前（多次）触发change事件被form组件监听了</li>
+      <li>
+        解决头像上传、文件上传规则验证问题，原因：a-upload组件上传前（多次）触发change事件被form组件监听了
+      </li>
     </ul>
     <div class="title">2021年10月20日</div>
     <ul>
@@ -178,7 +184,9 @@
     <div class="title">2021年11月13日</div>
     <ul>
       <li>动态路由末尾追加通配符404</li>
-      <li>vue3 transition需要模板单个根节点与vue3 模板可以多根节点理念不符，无硬性要求待v3完善后添加</li>
+      <li>
+        vue3 transition需要模板单个根节点与vue3 模板可以多根节点理念不符，无硬性要求待v3完善后添加
+      </li>
     </ul>
     <div class="title">2022年03月03日</div>
     <ul>
@@ -189,12 +197,8 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
-import mockData from '../../mock/index';
 export default defineComponent({
-  name: 'log',
-  setup() {
-    
-  }
+  name: 'Log',
 });
 </script>
 <style lang="less" scoped>

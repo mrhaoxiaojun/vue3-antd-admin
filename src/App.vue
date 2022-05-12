@@ -5,24 +5,28 @@
 </template>
 
 <script lang="ts" setup>
-import globalConfig from '@/config/index'
-import { ref, Ref, watch} from 'vue';
+import globalConfig from '@/config/index';
+import { ref, Ref, watch } from 'vue';
 import { lang } from './locales/config';
 import { useStore } from 'vuex';
 // import moment from 'moment';
 // moment.locale('zh-cn');
 
-const store = useStore()
+const store = useStore();
 
-let {setting:{lang:defaultLang}} = globalConfig
+const {
+  setting: { lang: defaultLang },
+} = globalConfig;
 
-let getPopupContainer:Ref =  ref({
-  locale: lang[defaultLang]
-})
-
-watch(()=>store.state.com.lang, function() {
-  console.log('current language',store.state.com.lang);
-  getPopupContainer.value.locale = lang[store.state.com.lang]
+const getPopupContainer: Ref = ref({
+  locale: lang[defaultLang],
 });
 
+watch(
+  () => store.state.com.lang,
+  function () {
+    console.log('current language', store.state.com.lang);
+    getPopupContainer.value.locale = lang[store.state.com.lang];
+  }
+);
 </script>

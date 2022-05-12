@@ -1,6 +1,9 @@
 <template>
   <div class="icon__container">
-    <p class="tip">说明：直接输入icon名称即可使用，简化了各个图标引入步骤。但是目前是全部引入icon的方案，后续会按需引入减少包的体积</p>
+    <p class="tip">
+      说明:
+      直接输入icon名称即可使用，简化了各个图标引入步骤。但是目前是全部引入icon的方案，后续会按需引入减少包的体积
+    </p>
     <pre>&lta-icon type="AndroidOutlined" /&gt</pre>
     <ul class="icons">
       <li><a-icon type="AndroidOutlined" /></li>
@@ -11,19 +14,19 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted } from 'vue'
-import AIcon from '@/components/aicon/AIcon.vue'
+import { defineComponent, onMounted } from 'vue';
+import AIcon from '@/components/aicon/AIcon.vue';
 export default defineComponent({
-  name: 'el_icon',
+  name: 'ElIcon',
   components: {
-    AIcon
+    AIcon,
   },
-  setup () {
+  setup() {
     onMounted(() => {
-      console.log(123)
-    })
-  }
-})
+      console.log(123);
+    });
+  },
+});
 </script>
 <style lang="less" scoped>
 .icon__container {
@@ -34,7 +37,7 @@ export default defineComponent({
   }
   & pre {
     background-color: #f6f6f6;
-    padding: 10px
+    padding: 10px;
   }
   & .icons {
     display: flex;

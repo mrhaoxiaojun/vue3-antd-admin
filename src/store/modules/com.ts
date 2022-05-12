@@ -1,26 +1,22 @@
-
 export type ComState = {
-  lang: string,
-}
+  lang: string;
+};
 
 const state: ComState = {
   // 国际化
-  lang: "",
-}
+  lang: '',
+};
 
 const com = {
-
   namespaced: true,
 
   state,
 
   mutations: {
-
-    setLang (state: ComState, lang:string) {
-      state.lang = lang
+    setLang(state: ComState, lang: string) {
+      state.lang = lang;
     },
-  }
+  },
+};
 
-}
-
-export default com
+export default com;

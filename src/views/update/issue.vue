@@ -2,17 +2,26 @@
   <div class="issue__container">
     <div class="title">2021年08月04日</div>
     <ul>
-      <li>刷新页面输出警告：No match found for location with path，这是发生在beforeEach之前，所以不知道是不是Router 4x自身的问题，在动态添加路由时无法避免</li>
-      <li>输出警告：evTools failed to load SourceMap: Could not load content for http://localhost:3000/talent/update/antd.css.map</li>
+      <li>
+        刷新页面输出警告: No match found for location with
+        path，这是发生在beforeEach之前，所以不知道是不是Router
+        4x自身的问题，在动态添加路由时无法避免
+      </li>
+      <li>
+        输出警告: evTools failed to load SourceMap: Could not load content for
+        http://localhost:3000/talent/update/antd.css.map
+      </li>
       <li class="solve">依赖外部接口，自身还没有mock数据</li>
       <li class="solve">antd全量引入,导致打包后体积达到3M</li>
-      <li >a-icon全量引入没有按需加载 </li>
+      <li>a-icon全量引入没有按需加载</li>
     </ul>
-    <div class="title" style="color:red">2022年03月15日</div>
+    <div class="title" style="color: red">2022年03月15日</div>
     <ul>
       <li>以下记录为开源作者贡献记录，开源万岁</li>
       <li>开始接手开源通用框架进行改造</li>
-      <li style="color:red">------------------------------------------------------------------------------</li>
+      <li style="color: red">
+        ------------------------------------------------------------------------------
+      </li>
     </ul>
     <div class="title">2021年08月08日</div>
     <ul>
@@ -61,7 +70,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 export default defineComponent({
-  name: 'issue'
+  name: 'Issue',
 });
 </script>
 <style lang="less" scoped>

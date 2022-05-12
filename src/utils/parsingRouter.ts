@@ -1,10 +1,10 @@
-import { Component } from 'vue'
-import { RouteRecordRaw } from 'vue-router'
-import BasicLayout from '@/layout/BasicLayout.vue'
-import { RouterTable, RouterObj } from '@/types/api/login'
-import BlankView from '@/layout/BlankView.vue'
+import { Component } from 'vue';
+import { RouteRecordRaw } from 'vue-router';
+import BasicLayout from '@/layout/BasicLayout.vue';
+import { RouterTable } from '@/types/api/login';
+import BlankView from '@/layout/BlankView.vue';
 
-const modules = import.meta.glob('/src/views/**/*.vue')
+const modules = import.meta.glob('/src/views/**/*.vue');
 
 /**
  * @desc: 解析路由
@@ -13,36 +13,36 @@ const modules = import.meta.glob('/src/views/**/*.vue')
  * @return 返回RouteRecordRaw
  */
 export const generator = (routerMap: RouterTable, parent?: RouteRecordRaw) => {
-
   interface basic {
-    BasicLayout: Component,
-    BlankView: Component
+    BasicLayout: Component;
+    BlankView: Component;
   }
-  const constantRouterComponents: basic = { BasicLayout, BlankView }
-  return routerMap.map(item => {
+  const constantRouterComponents: basic = { BasicLayout, BlankView };
+  return routerMap.map((item) => {
     const currentRouter: RouteRecordRaw = {
-      path: item.path || `${parent && parent.path || ''}/${item.key}`,
+      path: item.path || `${(parent && parent.path) || ''}/${item.key}`,
       name: item.key || '',
-      component: (constantRouterComponents[item.component || item.key]) || (modules[`/src/views${item.component}.vue`]),
+      component:
+        constantRouterComponents[item.component || item.key] ||
+        modules[`/src/views${item.component}.vue`],
       meta: {
         id: item.id,
         title: item.name,
         keepAlive: item.keepAlive || false,
         hidden: item.hidden || false,
-        sideBar: item.sideBar || "Y"
-      }
-    }
+        sideBar: item.sideBar || 'Y',
+      },
+    };
     // 为了防止出现后端返回结果不规范，处理有可能出现拼接出两个 反斜杠
     if (!currentRouter.path.startsWith('http')) {
-      currentRouter.path = currentRouter.path.replace('//', '/')
+      currentRouter.path = currentRouter.path.replace('//', '/');
     }
     // 重定向
-    item.redirect && (currentRouter.redirect = item.redirect)
+    item.redirect && (currentRouter.redirect = item.redirect);
     // 是否有子菜单，并递归处理
     if (item.children && item.children.length > 0) {
-      currentRouter.children = generator(item.children, currentRouter)
+      currentRouter.children = generator(item.children, currentRouter);
     }
-    return currentRouter
-  })
-
-}
+    return currentRouter;
+  });
+};

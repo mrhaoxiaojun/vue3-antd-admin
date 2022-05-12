@@ -1,198 +1,211 @@
 <template>
   <a-card class="table__layout">
-    <template #title v-if="(selectItem && selectItem.length > 0) || add || $slots.button">
-      <div class="table__top" v-if="selectItem && selectItem.length > 0">
-        <Form 
+    <template v-if="(selectItem && selectItem.length > 0) || add || $slots.button" #title>
+      <div v-if="selectItem && selectItem.length > 0" class="table__top">
+        <Form
           ref="selectForm"
           name="select"
-          :formItem="selectItem || []"
-          :setData="selectFun"
+          :form-item="selectItem || []"
+          :set-data="selectFun"
           @succeed="selectComplete"
         >
           <!-- 自定义表单 -->
-          <template v-slot:[formSlot(item)]="{ formData, key }" v-for="item in (selectItem ? selectItem : [])">
-            <slot :name="item.slotName" :formData="formData" :key="key"  v-if="item.type === 'slot'" />
+          <template
+            v-for="item in selectItem ? selectItem : []"
+            :key="item"
+            #[formSlot(item)]="{ formData, key }"
+          >
+            <slot
+              v-if="item.type === 'slot'"
+              :key="key"
+              :name="item.slotName"
+              :form-data="formData"
+            />
           </template>
         </Form>
         <div class="table__top_select">
-          <a-button type="primary" @click="selectForm.onSubmit()">查询</a-button>
-          <a-button class="top_btn" @click="resetQuery">重置</a-button>
+          <a-button type="primary" @click="selectForm.onSubmit()"> 查询 </a-button>
+          <a-button class="top_btn" @click="resetQuery"> 重置 </a-button>
         </div>
       </div>
       <div class="table__btn">
-        <a-button type="primary" @click="defaultAdd" v-if="add">新增</a-button>
+        <a-button v-if="add" type="primary" @click="defaultAdd"> 新增 </a-button>
         <!-- 自定义按钮 -->
         <slot name="button" />
       </div>
     </template>
     <a-table
       v-bind="tableProps"
-      :rowKey='rowkey'
-      :dataSource="dataSource"
+      :row-key="rowkey"
+      :data-source="dataSource"
       :pagination="page === true ? paging : false"
       :loading="loading"
       @change="tableChange"
     >
       <template #operation="item">
         <div class="operation">
-          <a @click="defaultEdit(item)" v-if="edit">编辑</a>
-          <a-divider type="vertical" v-if="del" />
-          <a class="danger" @click="defaultDel(item)" v-if="del">删除</a>
+          <a v-if="edit" @click="defaultEdit(item)">编辑</a>
+          <a-divider v-if="del" type="vertical" />
+          <a v-if="del" class="danger" @click="defaultDel(item)">删除</a>
           <slot name="operationMore" :value="item" />
         </div>
       </template>
       <!-- 自定义列 -->
-      <template v-slot:[key]="item" v-for="(value, key) in $slots">
-        <slot :name="key" :value="item"></slot>
+      <template v-for="(value, key) in $slots" #[key]="item">
+        <slot :name="key" :value="item" />
       </template>
     </a-table>
   </a-card>
-  <Modal
-    ref="addModal" 
-    title="添加数据" 
-    @ok="addSubmit"
-    @cancel="addForm.reset()"
-    v-if="add"
-  >
-    <Form 
+  <Modal v-if="add" ref="addModal" title="添加数据" @ok="addSubmit" @cancel="addForm.reset()">
+    <Form
       ref="addForm"
       name="add"
-      :formItem="addItem ? addItem : formItem"
+      :form-item="addItem ? addItem : formItem"
       :rules="addRules ? addRules : rules"
-      :setData="add"
+      :set-data="add"
       :additional="addToData"
       @succeed="addComplete"
       @fail="addModal.loading(false)"
     >
-      <template v-slot:[formSlot(item)]="{ formData, key }" v-for="item in (addItem ? addItem : formItem)">
-        <slot :name="item.slotName" :formData="formData" :key="key"  v-if="item.type === 'slot'" />
+      <template
+        v-for="item in addItem ? addItem : formItem"
+        :key="item"
+        #[formSlot(item)]="{ formData, key }"
+      >
+        <slot v-if="item.type === 'slot'" :key="key" :name="item.slotName" :form-data="formData" />
       </template>
     </Form>
   </Modal>
-  <Modal 
-    ref="editModal" 
-    title="编辑数据" 
-    @ok="editSubmit"
-    @cancel="enditCancel"
-    v-if="edit"
-  >
-    <Form 
+  <Modal v-if="edit" ref="editModal" title="编辑数据" @ok="editSubmit" @cancel="enditCancel">
+    <Form
       ref="editForm"
       name="edit"
-      :dataKey="editKey ? editKey : rowkey"
-      :formItem="editItem ? editItem : formItem"
+      :data-key="editKey ? editKey : rowkey"
+      :form-item="editItem ? editItem : formItem"
       :rules="editRules ? editRules : rules"
-      :setData="edit"
-      :defaultData="editDefData"
+      :set-data="edit"
+      :default-data="editDefData"
       @succeed="editComplete"
       @fail="editModal.loading(false)"
     >
-      <template v-slot:[formSlot(item)]="{ formData, key }" v-for="item in (editItem ? editItem : formItem)">
-        <slot :name="item.slotName" :formData="formData" :key="key"  v-if="item.type === 'slot'" />
+      <template
+        v-for="item in editItem ? editItem : formItem"
+        :key="item"
+        #[formSlot(item)]="{ formData, key }"
+      >
+        <slot v-if="item.type === 'slot'" :key="key" :name="item.slotName" :form-data="formData" />
       </template>
     </Form>
   </Modal>
 </template>
 <script lang="ts">
-import utils from './utils'
-import Form from './form.vue'
-import Modal from './modal.vue'
-import { FormItem, SetData, GetData, EditData, OptionsData } from './type'
-import { message, Modal as antModal } from 'ant-design-vue'
-import { QuestionCircleOutlined } from '@ant-design/icons-vue'
-import { ColumnProps } from 'ant-design-vue/es/table/interface'
-import { defaultTableProps } from 'ant-design-vue/es/table/Table'
-import { defineComponent, ref, reactive, createVNode, computed, onBeforeMount, onMounted, PropType } from 'vue'
+import utils from './utils';
+import Form from './form.vue';
+import Modal from './modal.vue';
+import { FormItem, SetData, GetData, EditData, OptionsData } from './type';
+import { message, Modal as antModal } from 'ant-design-vue';
+import { QuestionCircleOutlined } from '@ant-design/icons-vue';
+import { ColumnProps } from 'ant-design-vue/es/table/interface';
+import { defaultTableProps } from 'ant-design-vue/es/table/Table';
+import {
+  defineComponent,
+  ref,
+  reactive,
+  createVNode,
+  computed,
+  onBeforeMount,
+  onMounted,
+  PropType,
+} from 'vue';
 export default defineComponent({
-  name: 'comTable',
+  name: 'ComTable',
   components: {
     Form,
-    Modal
+    Modal,
   },
-  emits: [ 'editOpen', 'addOpen', 'editSuccess', 'addSuccess' ],
   props: {
     ...defaultTableProps,
     // 重置ant-design的columns数据类型(属于ant的ts类型定义bug,他定义的是ColumnProps对象,实质为数组嵌套ColumnProps)
     columns: {
       type: Array as PropType<ColumnProps[]>,
-      required: true
+      required: true,
     },
     // 添加/修改_条目
     formItem: {
       type: Array as PropType<FormItem[]>,
       required: false,
-      default: []
+      default: () => [],
     },
     // 查询条目
     selectItem: {
       type: Array as PropType<FormItem[]>,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 添加/查询_规则
     rules: {
       type: Object,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 查询接口
     get: {
       type: Function as PropType<GetData>,
-      required: true
+      required: true,
     },
     // 添加接口_false不展示
     add: {
       type: Function as PropType<SetData>,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 拉取修改数据接口_false修改前不调用
     editData: {
       type: Function as PropType<EditData>,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 修改接口_false不展示
     edit: {
       type: Function as PropType<SetData>,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 删除接口_false不展示
     del: {
       type: Function as PropType<SetData>,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 取远程多选项接口
     options: {
       type: Function as PropType<OptionsData>,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 列表/编辑/删除_主键
     rowkey: {
       type: String,
       required: false,
-      default: 'id'
+      default: 'id',
     },
     // 分页显隐
     page: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     // 默认操作栏宽度
     operationWidth: {
       type: Number,
       required: false,
-      default: 200
+      default: 200,
     },
     // 默认操作显隐
     operationShow: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
 
     // 自定义设置项
@@ -201,70 +214,69 @@ export default defineComponent({
     addItem: {
       type: Array as PropType<FormItem[]>,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 编辑条目
     editItem: {
       type: Array as PropType<FormItem[]>,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 编辑主键
     editKey: {
       type: String,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 删除主键
     delKey: {
       type: String,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 添加规则
     addRules: {
       type: Object,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 编辑规则
     editRules: {
       type: Object,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 固定参数
     params: {
       type: Object,
       required: false,
-      default: undefined
+      default: undefined,
     },
     // 添加表单额外数据
     addToData: {
       type: Object,
       required: false,
-      default: {}
-    }
-
+      default: () => ({}),
+    },
   },
-  setup (props, context) {
-
-    /**** 表单初始化 ****/
+  emits: ['editOpen', 'addOpen', 'editSuccess', 'addSuccess'],
+  setup(props, context) {
+    /** ** 表单初始化 ****/
 
     // 初始化数据源
-    const dataSource = ref<any[]>([])
+    const dataSource = ref<any[]>([]);
 
     // 初始化表单配置
-    const tableKeys = Object.keys(defaultTableProps)
+    const tableKeys = Object.keys(defaultTableProps);
     const tableProps = computed(() => {
-      const dataProps = reactive({})
-      Object.keys(props).forEach(key => {
+      const dataProps = reactive({});
+      Object.keys(props).forEach((key) => {
         if (tableKeys.includes(key)) {
-          dataProps[key] = props[key]
+          dataProps[key] = props[key];
         }
-      }) 
-      return dataProps
-    })
+      });
+      return dataProps;
+    });
 
     // 初始化操作栏
     onBeforeMount(() => {
@@ -274,12 +286,15 @@ export default defineComponent({
           width: props.operationWidth,
           key: 'operation',
           fixed: 'right',
-          slots: { customRender: 'operation' }
-        }
+          slots: { customRender: 'operation' },
+        };
         // 防止多次插入
-        if (!utils.arrIsKey(props.columns, 'key', 'operation')) props.columns.push(action)
+        if (!utils.arrIsKey(props.columns, 'key', 'operation')) {
+          // eslint-disable-next-line vue/no-mutating-props
+          props.columns.push(action);
+        }
       }
-    })
+    });
 
     // 初始化分页
     const paging = reactive({
@@ -289,239 +304,266 @@ export default defineComponent({
       total: 0,
       showTotal: (total: number) => `共${total}条`,
       showSizeChanger: true,
-      showQuickJumper: true
-    })
+      showQuickJumper: true,
+    });
 
     // 加载loading
-    const loading = ref(false)
+    const loading = ref(false);
 
     // 拉取表单数据
-    const selectForm = ref()
+    const selectForm = ref();
     const getData = () => {
-      loading.value = true
-      const selectData = selectForm.value ? selectForm.value.formData : {}
-      const params: any = {}
-      Object.keys(selectData).forEach(key => {
+      loading.value = true;
+      const selectData = selectForm.value ? selectForm.value.formData : {};
+      const params: any = {};
+      Object.keys(selectData).forEach((key) => {
         if (selectData[key]) {
-          params[key] = selectData[key]
+          params[key] = selectData[key];
         }
-      })
+      });
       if (props.page) {
-        params.current = paging.current
-        params.pageSize = paging.pageSize
+        params.current = paging.current;
+        params.pageSize = paging.pageSize;
       }
       if (props.params) {
-        Object.assign(params, props.params)
+        Object.assign(params, props.params);
       }
-      props.get(params).then(e => {
-        dataSource.value = e.data.data
-        const { current, total, pageSize } = e.data
-        paging.current = current
-        paging.total = total
-        paging.pageSize = pageSize
-        loading.value = false
-      }).catch(err => {
-        message.error(err.message || err.data.message)
-        loading.value = false
-      }) 
-    }
+      props
+        .get(params)
+        .then((e) => {
+          dataSource.value = e.data.data;
+          const { current, total, pageSize } = e.data;
+          paging.current = current;
+          paging.total = total;
+          paging.pageSize = pageSize;
+          loading.value = false;
+        })
+        .catch((err) => {
+          message.error(err.message || err.data.message);
+          loading.value = false;
+        });
+    };
 
     // 取远程多选选项
     const getOptions = () => {
       if (props.options) {
-        props.options().then(e => {
-          props.selectItem && setOptions(props.selectItem, e.data.data)
-          props.formItem && setOptions(props.formItem, e.data.data)
-          props.addItem && setOptions(props.addItem, e.data.data)
-          props.editItem && setOptions(props.editItem, e.data.data)
-        }).catch(err => {
-          message.error(err.message || err.data.message)
-        })
+        props
+          .options()
+          .then((e) => {
+            props.selectItem && setOptions(props.selectItem, e.data.data);
+            props.formItem && setOptions(props.formItem, e.data.data);
+            props.addItem && setOptions(props.addItem, e.data.data);
+            props.editItem && setOptions(props.editItem, e.data.data);
+          })
+          .catch((err) => {
+            message.error(err.message || err.data.message);
+          });
       }
-    }
+    };
 
     // 设置远程选项到配置项内
     const setOptions = (items: FormItem[], data: any) => {
-      items.forEach(item => {
+      items.forEach((item) => {
         if (item.optionKey) {
-          item.options = data[item.optionKey] || []
+          item.options = data[item.optionKey] || [];
         }
-      })
-    }
+      });
+    };
 
     onMounted(() => {
-      getData()
-      getOptions()
-    })
-    
+      getData();
+      getOptions();
+    });
 
-    /**** 表单主动事件 ****/
+    /** ** 表单主动事件 ****/
 
     // 表格分页、排序、筛选变化时触发
     const tableChange = (pagination: any) => {
-      const { current, pageSize } = pagination
-      paging.current = current
-      paging.pageSize = pageSize
-      getData()
-    }
+      const { current, pageSize } = pagination;
+      paging.current = current;
+      paging.pageSize = pageSize;
+      getData();
+    };
 
-    /**** 查询数据 ****/
+    /** ** 查询数据 ****/
 
     const selectFun: SetData = async (selectData: any): Promise<any> => {
       const params = {
         current: 1,
         pageSize: paging.pageSize,
-        ...selectData
-      }
+        ...selectData,
+      };
       if (props.params) {
-        Object.assign(params, props.params)
+        Object.assign(params, props.params);
       }
-      loading.value = true
+      loading.value = true;
       try {
-        const e = await props.get(params)
-        loading.value = false
-        return e
+        const e = await props.get(params);
+        loading.value = false;
+        return e;
       } catch (error) {
-        loading.value = false
-        return error
+        loading.value = false;
+        return error;
       }
-    }
+    };
 
     // 查询提交完成
     const selectComplete = (e: any) => {
-      dataSource.value = e.data.data
-      const { current, total, pageSize } = e.data
-      paging.current = current
-      paging.total = total
-      paging.pageSize = pageSize
-    }
+      dataSource.value = e.data.data;
+      const { current, total, pageSize } = e.data;
+      paging.current = current;
+      paging.total = total;
+      paging.pageSize = pageSize;
+    };
 
     // 重置查询条件
     const resetQuery = () => {
-      selectForm.value.reset()
-      paging.current = 1
-      getData()
-    }
+      selectForm.value.reset();
+      paging.current = 1;
+      getData();
+    };
 
-    /**** 编辑数据 ****/
+    /** ** 编辑数据 ****/
 
-    const editForm = ref()
-    const editModal = ref()
-    const editDefData: any = reactive({})
+    const editForm = ref();
+    const editModal = ref();
+    const editDefData: any = reactive({});
 
     // 点击表单编辑按钮
     const defaultEdit = (e: any) => {
       if (props.editData === undefined) {
-        editModal.value.open()
-        const data = e.text
-        Object.keys(data).forEach(key => {
-          editDefData[key] = data[key]
-        })
-        context.emit('editOpen', editDefData)
+        editModal.value.open();
+        const data = e.text;
+        Object.keys(data).forEach((key) => {
+          editDefData[key] = data[key];
+        });
+        context.emit('editOpen', editDefData);
       } else {
-        loading.value = true
-        const editKey = props.editKey || props.rowkey
-        props.editData({ [editKey]: e.text[editKey] }).then(e => {
-          const data = e.data.data
-          Object.keys(data).forEach(key => {
-            editDefData[key] = data[key]
+        loading.value = true;
+        const editKey = props.editKey || props.rowkey;
+        props
+          .editData({ [editKey]: e.text[editKey] })
+          .then((e) => {
+            const data = e.data.data;
+            Object.keys(data).forEach((key) => {
+              editDefData[key] = data[key];
+            });
+            context.emit('editOpen', e.data);
+            loading.value = false;
+            editModal.value.open();
           })
-          context.emit('editOpen', e.data)
-          loading.value = false
-          editModal.value.open()
-        }).catch(err => {
-          message.error(err.message || err.data.message)
-          loading.value = false
-        })
+          .catch((err) => {
+            message.error(err.message || err.data.message);
+            loading.value = false;
+          });
       }
-    }
+    };
 
     // 提交编辑好的数据
     const editSubmit = () => {
-      editModal.value.modalLoading = true
-      editForm.value.onSubmit()
-    }
-    
+      editModal.value.modalLoading = true;
+      editForm.value.onSubmit();
+    };
+
     // 表单编辑提交完成回调
     const editComplete = () => {
-      editModal.value.close()
-      context.emit('editSuccess')
-      utils.initData(props.editItem || props.formItem, editDefData)
-      getData()
-      getOptions()
-    }
+      editModal.value.close();
+      context.emit('editSuccess');
+      utils.initData(props.editItem || props.formItem, editDefData);
+      getData();
+      getOptions();
+    };
 
     // 编辑弹框取消事件
     const enditCancel = () => {
-      utils.initData(props.editItem || props.formItem, editDefData)
-    }
+      utils.initData(props.editItem || props.formItem, editDefData);
+    };
 
-    /**** 删除数据 ****/
+    /** ** 删除数据 ****/
 
     // 删除事件
     const defaultDel = (e: any) => {
-      const delFun = props.del as SetData
-      const data = {}
-      const key = props.delKey ? props.delKey : props.rowkey
-      data[key] = e.text[key]
+      const delFun = props.del as SetData;
+      const data = {};
+      const key = props.delKey ? props.delKey : props.rowkey;
+      data[key] = e.text[key];
       antModal.confirm({
         title: '您确定删除该条数据么？',
         content: '请谨慎选择此操作不可逆',
         icon: createVNode(QuestionCircleOutlined),
-        onOk () {
-          return delFun(data).then(e => {
-            message.success(e.data.message)
-            getData()
-            getOptions()
-          }).catch(err => {
-            message.error(err.message || err.data.message)
-          })
-        }
-      })
-    }
+        onOk() {
+          return delFun(data)
+            .then((e) => {
+              message.success(e.data.message);
+              getData();
+              getOptions();
+            })
+            .catch((err) => {
+              message.error(err.message || err.data.message);
+            });
+        },
+      });
+    };
 
-    /**** 添加数据 ****/
+    /** ** 添加数据 ****/
 
-    const addForm = ref()
-    const addModal = ref()
+    const addForm = ref();
+    const addModal = ref();
 
-    // 点击表单添加按钮 
+    // 点击表单添加按钮
     const defaultAdd = () => {
-      addModal.value.open()
-      context.emit('addOpen')
-    }
+      addModal.value.open();
+      context.emit('addOpen');
+    };
 
     // 提交添加的数据
     const addSubmit = () => {
-      addModal.value.modalLoading = true
-      addForm.value.onSubmit()
-    }
+      addModal.value.modalLoading = true;
+      addForm.value.onSubmit();
+    };
 
     // 表单添加提交完成回调
     const addComplete = () => {
-      addModal.value.close()
-      addForm.value.reset()
-      context.emit('addSuccess')
-      getData()
-      getOptions()
-    }
+      addModal.value.close();
+      addForm.value.reset();
+      context.emit('addSuccess');
+      getData();
+      getOptions();
+    };
 
     // 解析表单插槽名
     const formSlot = (item: FormItem) => {
-      return item.slotName ? item.slotName : 'noSlot'
-    }
-    
-    return { 
-      dataSource, tableProps, paging, loading, tableChange,
-      selectForm, selectFun, selectComplete, resetQuery,
-      editDefData, editForm, editModal, defaultEdit, editSubmit, editComplete, enditCancel,
-      defaultDel,
-      addForm, addModal, defaultAdd, addSubmit, addComplete,
-      getData, formSlot
-    }
+      return item.slotName ? item.slotName : 'noSlot';
+    };
 
-  }
-})
+    return {
+      dataSource,
+      tableProps,
+      paging,
+      loading,
+      tableChange,
+      selectForm,
+      selectFun,
+      selectComplete,
+      resetQuery,
+      editDefData,
+      editForm,
+      editModal,
+      defaultEdit,
+      editSubmit,
+      editComplete,
+      enditCancel,
+      defaultDel,
+      addForm,
+      addModal,
+      defaultAdd,
+      addSubmit,
+      addComplete,
+      getData,
+      formSlot,
+    };
+  },
+});
 </script>
 <style lang="less" scoped>
 .table__layout {
@@ -545,9 +587,9 @@ export default defineComponent({
     display: flex;
   }
   & .operation {
-    color: #1890FF;
+    color: #1890ff;
     & .danger {
-      color: #FF4D4F
+      color: #ff4d4f;
     }
   }
 }

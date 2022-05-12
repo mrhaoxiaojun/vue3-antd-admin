@@ -6,17 +6,14 @@
   </router-view>
 </template>
 <script lang="ts" setup>
+import useMapState from '@/hooks/useMapState';
 
-import useMapState from "@/hooks/useMapState"
+const myState: any = useMapState({
+  includeList: (state: any) => state.keepAlive.includeList,
+});
 
-const myState:any = useMapState({
-  includeList: (state: any) => state.keepAlive.includeList
-})
-
-const { includeList } = myState
-
+const { includeList } = myState;
 </script>
-
 
 <!-- <script lang="ts">
 import { mapState } from 'vuex'

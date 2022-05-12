@@ -1,21 +1,21 @@
 /*
- * @Author: haoxiaojun 
- * @Date: 2022-04-02 16:30:36 
+ * @Author: haoxiaojun
+ * @Date: 2022-04-02 16:30:36
  * @Details: 此配置为系统默认设置，需修改的设置项，可直接在此文件中修改。
  * @Details: 参考：https://github.com/iczer/vue-antd-admin/blob/master/src/config/default/setting.config.js
  * @Last Modified by: haoxiaojun
  * @Last Modified time: 2022-04-14 20:35:40
  */
 
-export default  {
-  lang: 'zh-CN',                           //语言，可选 zh-CN(简体)、en-US(英语)，也可扩展其它语言
-  Internationalization:true,              //是否开启国际化选项
-  layout: 'head',                          //导航布局，可选 side 和 head（可支持配置side，达到mix效果）模式，分别为侧边导航和顶部导航
-  menuUnfold:false,                         //side模式下菜单是否需要折叠
-  multiPage: true,                        //多页签模式，true:开启，false:不开启
-  filterMenu: false,                         //根据权限过滤菜单，true:过滤，false:不过滤
-  mockOnlineData:true,                     //是否使用本地数据（登录、退出、用户信息、layoutTable）
-  systemName: '简版通用前端框架',             //系统名称
+export default {
+  lang: 'zh-CN', // 语言，可选 zh-CN(简体)、en-US(英语)，也可扩展其它语言
+  Internationalization: true, // 是否开启国际化选项
+  layout: 'head', // 导航布局，可选 side 和 head（可支持配置side，达到mix效果）模式，分别为侧边导航和顶部导航
+  menuUnfold: false, // side模式下菜单是否需要折叠
+  multiPage: true, // 多页签模式，true:开启，false:不开启
+  filterMenu: false, // 根据权限过滤菜单，true:过滤，false:不过滤
+  mockOnlineData: true, // 是否使用本地数据（登录、退出、用户信息、layoutTable）
+  systemName: '简版通用前端框架', // 系统名称
   // theme: {                              //主题
   //   color: '#1890ff',                   //主题色
   //   mode: 'dark',                       //主题模式 可选 dark、 light 和 night
@@ -43,4 +43,4 @@ export default  {
   //   {link: 'https://github.com/iczer/vue-antd-admin', icon: 'github'},
   //   {link: 'https://ant.design', name: 'Ant Design'}
   // ],
-}
+};
