@@ -1,0 +1,14 @@
+/*
+ * @Author: haoxiaojun 
+ * @Date: 2022-05-12 16:00:54 
+ * @Details: 私有配置，避免和其他项目公用全局配置而冲突 
+ * @Last Modified by: haoxiaojun
+ * @Last Modified time: 2022-05-12 16:01:14
+ */
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "editor.formatOnSave": true, // 开启自动保存
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // 默认格式化工具选择prettier
+}
