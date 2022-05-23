@@ -11,8 +11,8 @@
         >
           <!-- 自定义表单 -->
           <template
-            v-for="item in selectItem ? selectItem : []"
-            :key="item"
+            v-for="(item, i) in selectItem ? selectItem : []"
+            :key="i"
             #[formSlot(item)]="{ formData, key }"
           >
             <slot
@@ -68,8 +68,8 @@
       @fail="addModal.loading(false)"
     >
       <template
-        v-for="item in addItem ? addItem : formItem"
-        :key="item"
+        v-for="(item, i) in addItem ? addItem : formItem"
+        :key="i"
         #[formSlot(item)]="{ formData, key }"
       >
         <slot v-if="item.type === 'slot'" :key="key" :name="item.slotName" :form-data="formData" />
@@ -89,8 +89,8 @@
       @fail="editModal.loading(false)"
     >
       <template
-        v-for="item in editItem ? editItem : formItem"
-        :key="item"
+        v-for="(item, i) in editItem ? editItem : formItem"
+        :key="i"
         #[formSlot(item)]="{ formData, key }"
       >
         <slot v-if="item.type === 'slot'" :key="key" :name="item.slotName" :form-data="formData" />

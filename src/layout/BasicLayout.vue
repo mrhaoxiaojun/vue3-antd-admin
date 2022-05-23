@@ -58,7 +58,7 @@ import config from '@/config';
 const route = useRoute();
 
 // 监听到变化,是否显示sidebar
-const isSideBar = ref<string>(route.meta.sideBar);
+const isSideBar = ref(route.meta.sideBar);
 console.log(0, isSideBar.value);
 watch(
   () => route.path,

@@ -175,7 +175,7 @@
   <br /><br />
   多语言测试：
   <br /><br />
-  <span @click="clc">{{ t('menu.home') }}</span>
+  <span>{{ t('menu.home') }}</span>
   <br /><br />
   <div :style="{ width: '300px', border: '1px solid #d9d9d9', borderRadius: '4px' }">
     <a-calendar v-model:value="value" :fullscreen="false" @panelChange="onPanelChange" />
