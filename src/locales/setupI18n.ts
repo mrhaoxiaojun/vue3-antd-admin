@@ -22,10 +22,11 @@ const localeData = {
   globalInjection: true,
 };
 
+export const i18n = createI18n(localeData);
+
 // setup i18n instance with glob
 export const setupI18n = {
   install(app: App) {
-    const i18n = createI18n(localeData);
     app.use(i18n);
   },
 };
